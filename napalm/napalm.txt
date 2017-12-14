@@ -1,0 +1,34 @@
+(cisco) ABELOZER-M-9202:~ abelozer$ napalm --user vagrant --password vagrant --vendor ios --optional_args "port=2222" localhost configure cfg.ios --strategy merge --dry-run
++ip route 10.145.12.4 255.255.255.252 Null0
+-------------------------------------------
+from napalm import get_network_driver
+driver = get_network_driver('ios')
+
+device = driver('127.0.0.1', 'vagrant', 'vagrant', optional_args={'port': 2222})
+device.open()
+
+dir(device)
+['__class__', '__del__', '__delattr__', '__dict__', '__dir__', '__doc__', '__enter__', '__eq__', '__exit__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__', '_canonical_int', '_check_file_exists', '_commit_hostname_handler', '_create_tmp_file', '_dest_file_system', '_disable_confirm', '_discover_file_system', '_enable_confirm', '_expand_interface_name', '_gen_full_path', '_gen_rollback_cfg', '_inline_tcl_xfer', '_lldp_detail_parser', '_load_candidate_wrapper', '_normalize_compare_config', '_normalize_merge_diff', '_normalize_merge_diff_incr', '_scp_file', '_send_command', '_send_command_postprocess', '_xfer_file', 'auto_rollback_on_error', 'bgp_time_conversion', 'candidate_cfg', 'cli', 'close', 'commit_config', 'compare_config', 'compliance_report', 'config_replace', 'connection_tests', 'dest_file_system', 'device', 'discard_config', 'get_arp_table', 'get_bgp_config', 'get_bgp_neighbors', 'get_bgp_neighbors_detail', 'get_config', 'get_environment', 'get_facts', 'get_firewall_policies', 'get_interfaces', 'get_interfaces_counters', 'get_interfaces_ip', 'get_ipv6_neighbors_table', 'get_lldp_neighbors', 'get_lldp_neighbors_detail', 'get_mac_address_table', 'get_network_instances', 'get_ntp_peers', 'get_ntp_servers', 'get_ntp_stats', 'get_optics', 'get_probes_config', 'get_probes_results', 'get_route_to', 'get_snmp_information', 'get_users', 'hostname', 'inline_transfer', 'interface_map', 'is_alive', 'load_merge_candidate', 'load_replace_candidate', 'load_template', 'merge_cfg', 'netmiko_optional_args', 'open', 'parse_uptime', 'password', 'ping', 'port', 'post_connection_tests', 'pre_connection_tests', 'profile', 'rollback', 'rollback_cfg', 'timeout', 'traceroute', 'transport', 'use_canonical_interface', 'username']
+
+device.get_facts()
+{'uptime': 176580, 'vendor': 'Cisco', 'os_version': 'CSR1000V Software (X86_64_LINUX_IOSD-UNIVERSALK9-M), Version 16.3.1, RELEASE SOFTWARE (fc3)', 'serial_number': '9XSP7UAEROK', 'model': 'CSR1000V', 'hostname': 'csr1kv', 'fqdn': 'csr1kv.dna.lab', 'interface_list': ['GigabitEthernet1', 'GigabitEthernet1.10', 'GigabitEthernet1.20', 'Loopback0', 'Loopback2', 'Loopback3', 'Loopback100', 'Loopback10000']}
+
+facts = device.get_facts()
+print(facts['vendor'])
+Cisco
+print(device.get_facts()['vendor'])
+Cisco
+
+device.get_interfaces_ip()
+{'GigabitEthernet1': {'ipv4': {'10.0.2.15': {'prefix_length': 24}}}, 'GigabitEthernet1.10': {'ipv4': {'10.1.0.1': {'prefix_length': 24}}}, 'Loopback0': {'ipv4': {'1.1.1.1': {'prefix_length': 32}}}, 'Loopback2': {'ipv4': {'2.2.2.2': {'prefix_length': 32}}}, 'Loopback3': {'ipv4': {'3.3.3.3': {'prefix_length': 32}}}, 'Loopback100': {'ipv4': {'100.100.100.100': {'prefix_length': 32}}}}
+
+device.load_replace_candidate(filename = '/Users/abelozer/cfg.ios')
+# удаляет все
+device.discard_config()
+
+device.load_merge_candidate(filename = '/Users/abelozer/cfg.ios')
+print(device.compare_config())
++ip route 10.145.12.4 255.255.255.252 Null0
+
+device.commit_config()
+device.rollback()
