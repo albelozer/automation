@@ -1,6 +1,8 @@
+import ipaddress
+
 debug_msg = "Debug:"
 debug = True
-ipv4addr = '265.2.4.1'
+
 
 def verify_ipv4_address(ipv4addr):
     '''
@@ -11,6 +13,7 @@ def verify_ipv4_address(ipv4addr):
         ipaddress.IPv4Address(ipv4addr)
     except ipaddress.AddressValueError as e:
         if debug is True:
-            print (e)
+            print(e)
         return False
-    else: return True
+    else:
+        return True
