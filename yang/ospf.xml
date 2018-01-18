@@ -1,0 +1,39 @@
+<config-template xmlns="http://tail-f.com/ns/config/1.0"
+                 servicepoint="ospf">
+  <devices xmlns="http://tail-f.com/ns/ncs">
+    <device>
+      <name>{/device-name}</name>
+      <config>
+
+<!-- IOSXR config -->
+  <router xmlns="http://tail-f.com/ned/cisco-ios-xr">
+        <ospf>
+          <name>{/process-id}</name>
+          <router-id>{/*/router-id}</router-id>
+          <area>
+                <id>{/*/area-id/area}</id>
+          <interface>
+                <name>{interface-name/interface-number}</name>
+         </interface>
+         </area>
+        </ospf>
+  </router>
+
+<!-- IOS config -->
+  <router xmlns="urn:ios">
+    <ospf>
+      <id>{/process-id}</id>
+      <non-vrf>
+        <router-id>{/*/router-id}</router-id>
+        <network>
+          <ip>{/*/network/ip}</ip>
+          <mask>{/*/network/mask}</mask>
+          <area>{/*/network/area}</area>
+        </network>
+      </non-vrf>
+    </ospf>
+  </router>
+      </config>
+    </device>
+  </devices>
+</config-template>

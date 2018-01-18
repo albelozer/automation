@@ -1,0 +1,110 @@
+module ospf {
+
+  namespace "http://com/example/ospf";
+  prefix ospf;
+
+  import ietf-inet-types {
+    prefix inet;
+  }
+
+  import tailf-ncs {
+    prefix ncs;
+  }
+
+ import tailf-common  { prefix tailf; }
+ // import tailf-ned-cisco-ios-xr { prefix cisco-ios-xr; }
+
+  typedef ospf-area { type union {
+  type uint32;
+  type inet:ipv4-address; }
+  }
+
+// Section 4.5
+
+  augment /ncs:services {
+    list ospf {
+      uses ncs:service-data;
+      ncs:servicepoint "ospf";
+
+        key "device-name";
+
+        leaf device-name     {
+                mandatory true;
+                type leafref    {
+                        path "/ncs:devices/ncs:device/ncs:name";
+                }
+        }
+
+        leaf process-id       {
+                mandatory true;
+                type string;
+                }
+
+// Section 4.6
+
+        container iosxr {
+                when "/ncs:devices/ncs:device[ncs:name=current()/../device-name]/ncs:device-type/ncs:cli/ncs:ned-id = 'cisco-ios-xr-id:cisco-ios
+     {
+//                      tailf:dependency "../device-name";
+//                      tailf:dependency "/ncs:devices/ncs:device/ncs:device-type";
+                }
+
+// Section 4.7
+        leaf router-id  {
+                tailf:info "OSPF XR Router ID";
+                mandatory true;
+                type inet:ipv4-address;
+                }
+        list area-id    {
+                tailf:info "OSPF XR Area ID";
+                key "area";
+                leaf area       {
+                        mandatory true;
+                        type ospf-area;
+                        }
+
+                list interface-name {
+                        key "interface-number";
+                        leaf interface-number   {
+                                tailf:info "IOS-XR OSPF interface" ;
+                                type string;
+                                }
+                        }
+                }
+        }
+
+// Section 4.8
+
+        container ios   {
+        when "/ncs:devices/ncs:device[ncs:name=current()/../device-name]/ncs:device-type/ncs:cli/ncs:ned-id = 'ios-id:cisco-ios'"    {
+//              tailf:dependency "../device-name";
+//              tailf:dependency "/ncs:devices/ncs:device/ncs:device-type";
+                }
+        leaf router-id  {
+                tailf:info "OSPF Router ID";
+                mandatory true;
+                type inet:ipv4-address;
+                }
+
+        list network {
+                tailf:info "OSPF Area ID";
+                key "ip mask";
+                leaf-list area       {
+                        type ospf-area;
+                        }
+                leaf ip {
+                        mandatory true;
+                        tailf:info "IOS OSPF network" ;
+                                type inet:ipv4-address;
+                                }
+                leaf mask {
+                        mandatory true;
+                        tailf:info "IOS OSPF network mask";
+                                type inet:ipv4-address;
+                                }
+                        }
+        }
+
+    }
+  }
+}
