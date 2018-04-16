@@ -1,0 +1,29 @@
+
+module ciscoconnect-visitors {
+  namespace "http://ciscoconnect.com/ciscoconnect-visitors";
+  prefix visitors;
+  import ietf-yang-types { prefix yang; }
+  typedef profile {
+    type string;
+    description
+      "Company business description";
+  }
+  container visitors {
+    config true;
+    list person {
+      key name;
+      leaf name { type string; }
+      leaf birthday { type yang:date-and-time; mandatory true;}
+      leaf company { type leafref { path "/visitors/company/name";}}
+    }
+    list company {
+      key name;
+      leaf name { type string; mandatory true; }
+      leaf profile { type profile; }
+      list employee {
+        key name;
+        leaf name { type leafref { path "/visitors/person/name";}}
+      }
+    }
+  }
+}

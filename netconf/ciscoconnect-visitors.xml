@@ -1,0 +1,29 @@
+
+
+<data xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
+  <visitors xmlns="http://ciscoconnect.com/ciscoconnect-visitors">
+    <person>
+      <name>Иван Иванов</name>
+      <birthday>1987-06-24T00:00:00-00:00</birthday>
+      <company>Супер ISP</company>
+    </person>
+    <person>
+      <name>Петр Петров</name>
+      <birthday>1985-02-05T00:00:00-00:00</birthday>
+    </person>
+    <company>
+      <name>Супер ISP</name>
+      <profile>Нет контракта на расширенную сервисную
+      поддержку.</profile>
+    </company>
+    <company>
+      <name>Самая лучшая компания</name>
+      <profile>Планируют запупку оборудования.
+      Есть контракт на расширенную техническую
+      поддержку.</profile>
+      <employee>
+        <name>Петр Петров</name>
+      </employee>
+    </company>
+  </visitors>
+</data>
